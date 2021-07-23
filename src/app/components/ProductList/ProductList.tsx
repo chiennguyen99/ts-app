@@ -2,7 +2,6 @@ import React from "react";
 import { Row, Col, Card } from "antd";
 import { Product } from "../../../models/Product";
 import "./styles.scss";
-import Meta from "antd/lib/card/Meta";
 
 interface Props {
   element: {
@@ -16,7 +15,7 @@ const Item: React.FC<Product> = ({ image, price, cost, title }) => {
       hoverable
       cover={<img alt="example" src={image} />}
     >
-      <Meta title={title} />
+      {title}
     </Card>
   );
 };
