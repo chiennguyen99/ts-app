@@ -1,15 +1,18 @@
 import { Router, Switch, Route } from "react-router-dom";
 import { history } from "../redux/history";
-import Auth from "./page/Auth";
-import Header from "../layout/components/Header/Header";
+import { Layout } from "antd";
+import HeaderPage from "../layout/components/Header/Header";
+import ProductScreen from "./page/Products/Products";
 
 const Routes = () => {
   return (
     <Router history={history}>
       <Switch>
-        <Route path="/auth">
-          <Header />
-          <Auth />
+        <Route path="/products">
+          <Layout>
+            <HeaderPage />
+            <ProductScreen />
+          </Layout>
         </Route>
       </Switch>
     </Router>
