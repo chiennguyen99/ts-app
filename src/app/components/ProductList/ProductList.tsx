@@ -1,13 +1,25 @@
 import React from "react";
-import { Row, Col } from "antd";
+import { Row, Col, Card } from "antd";
 import { Product } from "../../../models/Product";
 import "./styles.scss";
+import Meta from "antd/lib/card/Meta";
 
 interface Props {
   element: {
     items: Product[]
   };
 }
+
+const Item: React.FC<Product> = ({ image, price, cost, title }) => {
+  return (
+    <Card
+      hoverable
+      cover={<img alt="example" src={image} />}
+    >
+      <Meta title={title} />
+    </Card>
+  );
+};
 
 const ListOfProducts: React.FC<Props> = ({ element }) => {
   const { items } = element;
@@ -16,9 +28,10 @@ const ListOfProducts: React.FC<Props> = ({ element }) => {
   for (let r = 0; r < rowNumber; r++) {
     let cols = [];
     for (let c = 0; c < 5; c++) {
+      let item = items[c + 5 * r];
       cols.push(
         <Col key={r.toString() + c.toString()} span={24 / 5} className="item-container">
-          <div>Column</div>
+          <Item {...item} />
         </Col>
       );
     }
@@ -28,9 +41,10 @@ const ListOfProducts: React.FC<Props> = ({ element }) => {
     let cols = [];
     for (let c = 0; c < 5; c++) {
       if (c < items.length % 5) {
+        let item = items[c + 5 * rowNumber];
         cols.push(
           <Col key={rowNumber.toString() + c.toString()} span={24 / 5} className="item-container">
-            <div>Column</div>
+            <Item {...item} />
           </Col>
         );
       } else {
@@ -42,7 +56,7 @@ const ListOfProducts: React.FC<Props> = ({ element }) => {
     rows.push(<Row gutter={[16, 16]}>{cols}</Row>);
   }
   return (
-   <>{rows.map(r => r)}</>
+    <>{rows.map(r => r)}</>
   );
 };
 

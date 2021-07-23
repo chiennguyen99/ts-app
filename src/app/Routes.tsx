@@ -1,14 +1,15 @@
 import { Router, Switch, Route } from "react-router-dom";
-import { history } from "../redux/history";
 import { Layout } from "antd";
-import HeaderPage from "../layout/components/Header/Header";
+import { createBrowserHistory } from "history";
+import HeaderPage from "../layout/Header/Header";
 import ProductScreen from "./page/Products/Products";
 
 const Routes = () => {
+  const history = createBrowserHistory();
   return (
     <Router history={history}>
       <Switch>
-        <Route path="/products">
+        <Route path="/">
           <Layout>
             <HeaderPage />
             <ProductScreen />

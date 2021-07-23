@@ -1,35 +1,35 @@
 import React, { useState } from "react";
 import { Pagination, Row } from "antd";
 import { Content } from "antd/lib/layout/layout";
-import ListOfProducts from "../../components/ListOfProducts/ListOfProducts";
+import ListOfProducts from "../../components/ProductList/ProductList";
 import { Product } from "../../../models/Product";
 
 const ProductScreen: React.FC = () => {
   const [page, setPage] = useState(1);
   const items: Product[] = [
     {
-      image: "",
+      image: "https://lh3.googleusercontent.com/5NWBMUjAx99i-PGcSSqFOiqzPD7thKZFN3hBQ0n0XcJ56pofM1EEazVUGAyniKjM3OUMSotZaavy9FeGquolxCEXX4oGrww_9g=w500-rw",
       price: 1,
       cost: 2,
-      title: ""
+      title: "Nước Giặt Quần Áo Em Bé D-nee Xanh 3L"
     },
     {
-      image: "",
+      image: "https://lh3.googleusercontent.com/5NWBMUjAx99i-PGcSSqFOiqzPD7thKZFN3hBQ0n0XcJ56pofM1EEazVUGAyniKjM3OUMSotZaavy9FeGquolxCEXX4oGrww_9g=w500-rw",
       price: 1,
       cost: 2,
-      title: ""
+      title: "Nước Giặt Quần Áo Em Bé D-nee Xanh 3L"
     },
     {
-      image: "",
+      image: "https://lh3.googleusercontent.com/5NWBMUjAx99i-PGcSSqFOiqzPD7thKZFN3hBQ0n0XcJ56pofM1EEazVUGAyniKjM3OUMSotZaavy9FeGquolxCEXX4oGrww_9g=w500-rw",
       price: 1,
       cost: 2,
-      title: ""
+      title: "Nước Giặt Quần Áo Em Bé D-nee Xanh 3L"
     },
     {
-      image: "",
+      image: "https://lh3.googleusercontent.com/5NWBMUjAx99i-PGcSSqFOiqzPD7thKZFN3hBQ0n0XcJ56pofM1EEazVUGAyniKjM3OUMSotZaavy9FeGquolxCEXX4oGrww_9g=w500-rw",
       price: 1,
       cost: 2,
-      title: ""
+      title: "Nước Giặt Quần Áo Em Bé D-nee Xanh 3L"
     }
   ];
   function onChange(newPage: number) {
