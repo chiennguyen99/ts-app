@@ -7,7 +7,7 @@ export interface ErrorProduct {
   color: number;
 }
 
-export interface ErrorProductInTable {
+export interface ErrorProductsTable {
   id: string;
   errorDescription: string;
   image: JSX.Element;

@@ -3,13 +3,13 @@ import { Row, Table, Input, Select, Button, Modal, Form, List, Col } from "antd"
 import { Content } from "antd/lib/layout/layout";
 import { getColors } from "../../../services/color";
 import { getProducts } from "../../../services/product";
-import { Color, ErrorProduct, ErrorProductInTable } from "../../../models/ErrorProduct";
+import { Color, ErrorProduct, ErrorProductsTable } from "../../../models/ErrorProduct";
 import { Option } from "antd/lib/mentions";
 import { convertFromIdToName } from "../../../helper/color";
 import { compareTwoProducts, validateColorProduct, validateNameProduct, validateSKUProduct } from "../../../helper/product";
 
 const ErrorProducts = () => {
-  const [tableItems, setTableItems] = useState<ErrorProductInTable[] | undefined>();
+  const [tableItems, setTableItems] = useState<ErrorProductsTable[] | undefined>();
   const [products, setProducts] = useState<ErrorProduct[] | undefined>();
   const [repairedProducts, setRepairedProducts] = useState<ErrorProduct[] | undefined>();
   const [initialValues, setInitValues] = useState({});
@@ -47,12 +47,12 @@ const ErrorProducts = () => {
     const resColors = await getColors();
     const resData: ErrorProduct[] = resProducts.data;
     const colorList: Color[] = resColors.data;
-    const replaceLink: ErrorProductInTable[] = [];
+    const replaceLink: ErrorProductsTable[] = [];
     let initialObject: any = {};
     resData.forEach(d => {
       initialObject[`name${d.id}`] = d.name;
       initialObject[`sku${d.id}`] = d.sku;
-      let d1: ErrorProductInTable = {
+      let d1: ErrorProductsTable = {
         id: d.id,
         name: <Form.Item name={`name${d.id}`} rules={[{ required: true, message: 'Không để trống!' }, { max: 50, message: 'Không quá 50 kí tự!' }]}>
           <Input defaultValue={d.name} style={{ width: 250 }} />
