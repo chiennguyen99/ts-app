@@ -8,15 +8,10 @@ export interface ErrorProduct {
 }
 
 export interface ErrorProductsTable {
-  id: string;
-  errorDescription: string;
+  id: JSX.Element;
+  errorDescription: JSX.Element;
   image: JSX.Element;
   name: JSX.Element;
   sku: JSX.Element;
   color: JSX.Element;
-}
-
-export interface Color {
-  id: number;
-  name: string;
 }

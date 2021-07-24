@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { Row, Table, Input, Select, Button, Modal, Form, List, Col } from "antd";
-import { Content } from "antd/lib/layout/layout";
+import { Table, Input, Select, Button, Modal, Form } from "antd";
 import { getColors } from "../../../services/color";
 import { getProducts } from "../../../services/product";
-import { Color, ErrorProduct, ErrorProductsTable } from "../../../models/ErrorProduct";
+import { ErrorProduct, ErrorProductsTable } from "../../../models/ErrorProduct";
+import { Color } from "../../../models/Color";
 import { Option } from "antd/lib/mentions";
 import { convertFromIdToName } from "../../../helper/color";
 import { compareTwoProducts, removeProduct, validateColorProduct, validateNameProduct, validateSKUProduct } from "../../../helper/product";
+import VerticalProductList from "../../components/VerticalErrorProductList";
 
 const ErrorProducts = () => {
   const [tableItems, setTableItems] = useState<ErrorProductsTable[]>();
@@ -54,11 +55,11 @@ const ErrorProducts = () => {
       initialObject[`name${d.id}`] = d.name;
       initialObject[`sku${d.id}`] = d.sku;
       let d1: ErrorProductsTable = {
-        id: d.id,
+        id: <Form.Item>{d.id}</Form.Item>,
         name: <Form.Item name={`name${d.id}`} rules={[{ required: true, message: 'Không để trống!' }, { max: 50, message: 'Không quá 50 kí tự!' }]}>
           <Input defaultValue={d.name} style={{ width: 250 }} />
         </Form.Item>,
-        errorDescription: d.errorDescription,
+        errorDescription: <Form.Item>{d.errorDescription}</Form.Item>,
         image: d.image !== "" ? <img alt="" src={d.image} style={{ width: 100, height: 100 }} />
           : <div style={{ width: 100, height: 100 }}></div>,
         sku: <Form.Item name={`sku${d.id}`} rules={[{ required: true, message: 'Không để trống!' }, { max: 20, message: 'Không quá 20 kí tự!' }]}>
@@ -127,57 +128,33 @@ const ErrorProducts = () => {
   }, []);
 
   return (
-    <Content className="content" style={{ padding: '0 50px', marginTop: 64 }}>
-      <div className="site-layout-background"
-        style={{ paddingTop: 24, minHeight: 380, backgroundColor: "#fff", display: "flex", justifyContent: "center" }}>
-        {tableItems !== undefined && tableItems.length > 0 ?
-          <Form layout="vertical"
-            initialValues={initialValues}
-            onFinish={() => handleFormSubmit()}
-            onValuesChange={(cValues) => onValuesChangeForm(cValues)}
-          >
-            <Form.Item>
-              <Button type="primary" htmlType="submit" style={{ float: "right", marginBottom: 10 }}>
-                Submit
-              </Button>
-            </Form.Item>
-            <Table columns={columns} dataSource={tableItems} size="small" bordered />
-          </Form> : <></>}
-        <Modal
-          title="Re-uploaded Products"
-          visible={isModalVisible}
-          cancelButtonProps={{ style: { display: "none" } }}
-          onOk={() => { setIsModalVisible(false); }}
-          closable={false}
+    <div className="site-layout-background"
+      style={{ paddingTop: 24, minHeight: 380, backgroundColor: "#fff", display: "flex", justifyContent: "center", marginTop: 64 }}>
+      {tableItems !== undefined && tableItems.length > 0 ?
+        <Form layout="vertical"
+          initialValues={initialValues}
+          onFinish={() => handleFormSubmit()}
+          onValuesChange={(cValues) => onValuesChangeForm(cValues)}
         >
-          <div style={{ height: 300, overflowY: "auto" }}>
-            <List
-              itemLayout="horizontal"
-              dataSource={repairedProducts}
-              renderItem={item => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={<img alt="" src={item.image} style={{ width: 100, height: 100 }} />}
-                    title={item.name}
-                    description={<Col>
-                      <Row><p style={{ marginRight: 10 }}>ID:</p><p style={{ color: "#000000" }}>{item.id}</p></Row>
-                      <Row><p style={{ marginRight: 10 }}>SKU:</p><p style={{ color: "#FF0000" }}>{item.sku}</p></Row>
-                      <Row>
-                        <p style={{ marginRight: 10 }}>Color:</p>
-                        <p style={{ color: "#000000" }}>{colors !== undefined ?
-                          <>{convertFromIdToName(item.color, colors) !== undefined ? convertFromIdToName(item.color, colors) : "Không"}</>
-                          : "null"}
-                        </p>
-                      </Row>
-                    </Col>}
-                  />
-                </List.Item>
-              )}
-            />
-          </div>
-        </Modal>
-      </div>
-    </Content>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ float: "right", marginBottom: 10 }}>
+              Submit
+            </Button>
+          </Form.Item>
+          <Table columns={columns} dataSource={tableItems} size="small" bordered />
+        </Form> : <></>}
+      <Modal
+        title="Re-uploaded Products"
+        visible={isModalVisible}
+        cancelButtonProps={{ style: { display: "none" } }}
+        onOk={() => { setIsModalVisible(false); }}
+        closable={false}
+      >
+        <div style={{ height: 300, overflowY: "auto" }}>
+          <VerticalProductList colors={colors} dataSource={repairedProducts} />
+        </div>
+      </Modal>
+    </div>
   );
 };
 
