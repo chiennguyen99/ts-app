@@ -1,4 +1,4 @@
-import { ErrorProduct } from "../models/ErrorProduct";
+import { ErrorProduct } from "../models/errorProduct";
 
 export function compareTwoProducts(productA: ErrorProduct, productB: ErrorProduct) {
   return JSON.stringify(productA) === JSON.stringify(productB);

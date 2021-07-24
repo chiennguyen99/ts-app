@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, List, Col } from "antd";
-import { ErrorProduct } from "../../models/ErrorProduct";
-import { Color } from "../../models/Color";
+import { ErrorProduct } from "../../models/errorProduct";
+import { Color } from "../../models/color";
 import { convertFromIdToName } from "../../helper/color";
 
 interface Props {
