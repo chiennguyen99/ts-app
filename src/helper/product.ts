@@ -15,3 +15,7 @@ export function validateSKUProduct(sku: string) {
 export function validateColorProduct(color: number) {
   return color !== undefined && !isNaN(color);
 }
+
+export function removeProduct(id: string, productList: ErrorProduct[]) {
+  return productList.filter((p) => (p.id !== id));
+}

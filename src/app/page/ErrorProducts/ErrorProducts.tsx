@@ -6,15 +6,16 @@ import { getProducts } from "../../../services/product";
 import { Color, ErrorProduct, ErrorProductsTable } from "../../../models/ErrorProduct";
 import { Option } from "antd/lib/mentions";
 import { convertFromIdToName } from "../../../helper/color";
-import { compareTwoProducts, validateColorProduct, validateNameProduct, validateSKUProduct } from "../../../helper/product";
+import { compareTwoProducts, removeProduct, validateColorProduct, validateNameProduct, validateSKUProduct } from "../../../helper/product";
 
 const ErrorProducts = () => {
-  const [tableItems, setTableItems] = useState<ErrorProductsTable[] | undefined>();
-  const [products, setProducts] = useState<ErrorProduct[] | undefined>();
-  const [repairedProducts, setRepairedProducts] = useState<ErrorProduct[] | undefined>();
+  const [tableItems, setTableItems] = useState<ErrorProductsTable[]>();
+  const [products, setProducts] = useState<ErrorProduct[]>();
+  const [repairedProducts, setRepairedProducts] = useState<ErrorProduct[]>();
   const [initialValues, setInitValues] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [colors, setColors] = useState<Color[] | undefined>();
+  const [colors, setColors] = useState<Color[]>();
+  const [changedValues, setChangedValues] = useState<any>({});
   const columns = [
     {
       title: 'ID',
@@ -68,6 +69,7 @@ const ErrorProducts = () => {
             key={`color${d.id}`}
             defaultValue={convertFromIdToName(d.color, colorList)}
             style={{ width: 150 }}
+            placeholder={'Select Value'}
           >
             {colorList.map(c => (
               <Option value={c.id.toString()}>{c.name}</Option>
@@ -83,14 +85,18 @@ const ErrorProducts = () => {
     setColors(colorList);
   }
 
-  function handleFormSubmit(values: any) {
+  function handleFormSubmit() {
     setIsModalVisible(true);
-    const repairProducts: ErrorProduct[] = [];
+    let repairProducts: ErrorProduct[] = [];
+    if (repairedProducts !== undefined) {
+      repairProducts.push(...repairedProducts);
+    }
+    const newProducts: ErrorProduct[] = [];
     products?.forEach(item => {
-      const itemColor: number = Number(values[`color${item.id}`]);
-      const itemSKU: string = values[`sku${item.id}`];
-      const itemName: string = values[`name${item.id}`];
-      const newItem = {...item};
+      const itemColor: number = Number(changedValues[`color${item.id}`]);
+      const itemSKU: string = changedValues[`sku${item.id}`];
+      const itemName: string = changedValues[`name${item.id}`];
+      const newItem = { ...item };
       if (validateNameProduct(itemName) && itemName !== item.name) {
         newItem.name = itemName;
       }
@@ -101,10 +107,19 @@ const ErrorProducts = () => {
         newItem.color = itemColor;
       }
       if (!compareTwoProducts(newItem, item)) {
+        repairProducts = removeProduct(newItem.id, repairProducts);
         repairProducts.push(newItem);
+        newProducts.push(newItem);
+      } else {
+        newProducts.push(item);
       }
     });
+    setProducts(newProducts);
     setRepairedProducts(repairProducts);
+  }
+
+  function onValuesChangeForm(cValues: any) {
+    setChangedValues({ ...changedValues, ...cValues });
   }
 
   useEffect(() => {
@@ -113,27 +128,29 @@ const ErrorProducts = () => {
 
   return (
     <Content className="content" style={{ padding: '0 50px', marginTop: 64 }}>
-      <div className="site-layout-background" style={{ paddingTop: 24, minHeight: 380, backgroundColor: "#fff", alignItems: "center" }}>
+      <div className="site-layout-background"
+        style={{ paddingTop: 24, minHeight: 380, backgroundColor: "#fff", display: "flex", justifyContent: "center" }}>
         {tableItems !== undefined && tableItems.length > 0 ?
-          <Form layout="inline"
+          <Form layout="vertical"
             initialValues={initialValues}
-            onFinish={(values) => handleFormSubmit(values)}
+            onFinish={() => handleFormSubmit()}
+            onValuesChange={(cValues) => onValuesChangeForm(cValues)}
           >
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" style={{ float: "right", marginBottom: 10 }}>
                 Submit
               </Button>
             </Form.Item>
-            <Row justify="center">
-              <Table columns={columns} dataSource={tableItems} size="small" />
-            </Row>
+            <Table columns={columns} dataSource={tableItems} size="small" bordered />
           </Form> : <></>}
         <Modal
           title="Re-uploaded Products"
           visible={isModalVisible}
-          footer={null}
+          cancelButtonProps={{ style: { display: "none" } }}
+          onOk={() => { setIsModalVisible(false); }}
+          closable={false}
         >
-          <div style={{ height: 300, overflowY: "scroll" }}>
+          <div style={{ height: 300, overflowY: "auto" }}>
             <List
               itemLayout="horizontal"
               dataSource={repairedProducts}
@@ -148,7 +165,7 @@ const ErrorProducts = () => {
                       <Row>
                         <p style={{ marginRight: 10 }}>Color:</p>
                         <p style={{ color: "#000000" }}>{colors !== undefined ?
-                          <>{convertFromIdToName(item.color, colors) !== undefined ? convertFromIdToName(item.color, colors) : "null"}</>
+                          <>{convertFromIdToName(item.color, colors) !== undefined ? convertFromIdToName(item.color, colors) : "Không"}</>
                           : "null"}
                         </p>
                       </Row>
@@ -157,9 +174,6 @@ const ErrorProducts = () => {
                 </List.Item>
               )}
             />
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", marginTop: 10 }}>
-            <Button type="primary" onClick={() => { setIsModalVisible(false); }} style={{}}>OK</Button>
           </div>
         </Modal>
       </div>
