@@ -2,7 +2,7 @@ import { Router, Switch, Route } from "react-router-dom";
 import { Layout } from "antd";
 import { createBrowserHistory } from "history";
 import HeaderPage from "../layout/Header/Header";
-import ProductScreen from "./page/Products/Products";
+import ErrorProducts from "./page/ErrorProducts/ErrorProducts";
 
 const Routes = () => {
   const history = createBrowserHistory();
@@ -12,7 +12,7 @@ const Routes = () => {
         <Route path="/">
           <Layout>
             <HeaderPage />
-            <ProductScreen />
+            <ErrorProducts />
           </Layout>
         </Route>
       </Switch>
