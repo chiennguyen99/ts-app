@@ -44,13 +44,13 @@ const ErrorProducts = () => {
     resData.forEach(d => {
       let d1: ErrorProductInTable = {
         id: d.id,
-        name: <Form.Item rules={[{ required: true, message: 'Không để trống!' }, { max: 50, message: 'Không được quá 50 kí tự!' }]}>
+        name: <Form.Item name={`name${d.id}`} rules={[{ required: true, message: 'Không để trống!' }, { max: 50, message: 'Không quá 50 kí tự!' }]}>
           <Input defaultValue={d.name} style={{ width: 250 }} />
         </Form.Item>,
         errorDescription: d.errorDescription,
         image: d.image !== "" ? <img alt="" src={d.image} style={{ width: 100, height: 100 }} />
           : <div style={{ width: 100, height: 100 }}></div>,
-        sku: <Form.Item rules={[{  }]}>
+        sku: <Form.Item name={`sku${d.id}`} rules={[{ required: true, message: 'Không để trống!' }, { max: 20, message: 'Không quá 20 kí tự!' }]}>
           <Input defaultValue={d.sku} style={{ width: 100 }} />
         </Form.Item>,
         color: <Form.Item>
@@ -89,7 +89,7 @@ const ErrorProducts = () => {
       <div className="site-layout-background" style={{ paddingTop: 24, minHeight: 380, backgroundColor: "#fff", alignItems: "center" }}>
         <Form>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" onClick={() => { }}>
               Submit
             </Button>
           </Form.Item>
