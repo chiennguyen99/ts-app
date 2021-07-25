@@ -94,18 +94,18 @@ const ErrorProducts = () => {
     }
     const newProducts: ErrorProduct[] = [];
     products?.forEach(item => {
-      const itemColor: number = Number(changedValues[`color${item.id}`]);
-      const itemSKU: string = changedValues[`sku${item.id}`];
-      const itemName: string = changedValues[`name${item.id}`];
+      const newItemColor: number = Number(changedValues[`color${item.id}`]);
+      const newItemSKU: string = changedValues[`sku${item.id}`];
+      const newItemName: string = changedValues[`name${item.id}`];
       const newItem = { ...item };
-      if (validateNameProduct(itemName) && itemName !== item.name) {
-        newItem.name = itemName;
+      if (validateNameProduct(newItemName) && newItemName !== item.name) {
+        newItem.name = newItemName;
       }
-      if (validateSKUProduct(itemSKU) && itemSKU !== item.sku) {
-        newItem.sku = itemSKU;
+      if (validateSKUProduct(newItemSKU) && newItemSKU !== item.sku) {
+        newItem.sku = newItemSKU;
       }
-      if (validateColorProduct(itemColor)) {
-        newItem.color = itemColor;
+      if (validateColorProduct(newItemColor)) {
+        newItem.color = newItemColor;
       }
       if (!compareTwoProducts(newItem, item)) {
         repairProducts = removeProduct(newItem.id, repairProducts);
@@ -135,6 +135,7 @@ const ErrorProducts = () => {
           initialValues={initialValues}
           onFinish={() => handleFormSubmit()}
           onValuesChange={(cValues) => onValuesChangeForm(cValues)}
+          scrollToFirstError
         >
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ float: "right", marginBottom: 10 }}>
@@ -148,9 +149,10 @@ const ErrorProducts = () => {
         visible={isModalVisible}
         cancelButtonProps={{ style: { display: "none" } }}
         onOk={() => { setIsModalVisible(false); }}
+        onCancel={() => { setIsModalVisible(false); }}
         closable={false}
       >
-        <div style={{ height: 300, overflowY: "auto" }}>
+        <div style={{ maxHeight: 300, overflowY: "auto" }}>
           <VerticalProductList colors={colors} dataSource={repairedProducts} />
         </div>
       </Modal>
